@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_manager/firebase_manager.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:medicine_reminder/provider/flutter_storage.dart';
-import 'package:remote_manager/remote_manager.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+
 import '../model/medicine.dart';
 
 class AddMedicineProvider with ChangeNotifier {
@@ -30,7 +31,7 @@ class AddMedicineProvider with ChangeNotifier {
   String medicineName = "";
   String? barcode;
   String? userId;
-  RemoteManager remoteManager = RemoteManager();
+  FirebaseManager firebaseManager = FirebaseManager(apiKey: "");
   FlutterStorage flutterStorage = FlutterStorage();
 
   Future getUserId() async {
@@ -56,8 +57,10 @@ class AddMedicineProvider with ChangeNotifier {
         "description": addMedicine.description,
         "end_date": addMedicine.endDate,
       };
-      var id = await remoteManager.create(
-          collectionName: "medicine", data: medicine);
+      var id = await firebaseManager.create(
+        collection: "medicine",
+        data: medicine,
+      );
       if (id.id != null) {
         var addNew = AddMedicine(
           id: id.id,
@@ -96,8 +99,10 @@ class AddMedicineProvider with ChangeNotifier {
           "first_dose": addMedicine.doseTime,
           "which_dose": "firstDose",
         };
-        var id = await remoteManager.create(
-            collectionName: "medicine_details", data: medicine);
+        var id = await firebaseManager.create(
+          collection: "medicine_details",
+          data: medicine,
+        );
         if (id.id != null) {
           var addNew = AddMedicine(
             id: medicineId,
@@ -132,8 +137,8 @@ class AddMedicineProvider with ChangeNotifier {
           "second_dose": addMedicine.secondDoseTime,
           "which_dose": "secondDose",
         };
-        var id = await remoteManager.create(
-            collectionName: "medicine_details", data: medicine);
+        var id = await firebaseManager.create(
+            collection: "medicine_details", data: medicine);
         if (id.id != null) {
           var addNew = AddMedicine(
             id: medicineId,
@@ -168,8 +173,8 @@ class AddMedicineProvider with ChangeNotifier {
           "second_dose": addMedicine.secondDoseTime,
           "which_dose": "secondDose",
         };
-        var id = await remoteManager.create(
-            collectionName: "medicine_details", data: medicine);
+        var id = await firebaseManager.create(
+            collection: "medicine_details", data: medicine);
         if (id.id != null) {
           var addNew = AddMedicine(
             id: medicineId,
@@ -205,8 +210,8 @@ class AddMedicineProvider with ChangeNotifier {
           "third_dose": addMedicine.thirdDoseTime,
           "which_dose": "thirdDose",
         };
-        var id = await remoteManager.create(
-            collectionName: "medicine_details", data: medicine);
+        var id = await firebaseManager.create(
+            collection: "medicine_details", data: medicine);
         if (id.id != null) {
           var addNew = AddMedicine(
             id: medicineId,
@@ -240,7 +245,7 @@ class AddMedicineProvider with ChangeNotifier {
 
   Future getMedicineTypeData() async {
     try {
-      var response = await remoteManager.get(collectionName: "medicine_type");
+      var response = await firebaseManager.get(collection: "medicine_type");
       response.docs.forEach((element) {
         medicineType.clear();
         medName.clear();
@@ -261,8 +266,7 @@ class AddMedicineProvider with ChangeNotifier {
   Future getData({DateTime? date}) async {
     try {
       data.clear();
-      var medicineResponse =
-          await remoteManager.get(collectionName: "medicine");
+      var medicineResponse = await firebaseManager.get(collection: "medicine");
       medicineResponse.docs.forEach((element) {
         DateTime endDate = DateTime.parse(element['end_date']);
         var end = DateTime.utc(endDate.year, endDate.month, endDate.day);
@@ -281,7 +285,7 @@ class AddMedicineProvider with ChangeNotifier {
       });
       await Hive.box("medicine_reminder").put("medicine", data);
       var medicineDetailsResponse =
-          await remoteManager.get(collectionName: "medicine_details");
+          await firebaseManager.get(collection: "medicine_details");
       allMedicineDetails.clear();
       medicineDetailsResponse.docs.forEach((element) {
         if (element['user_id'] == userId) {
@@ -365,8 +369,8 @@ class AddMedicineProvider with ChangeNotifier {
         "dose": addMedicine.dose,
         "is_completed": true,
       };
-      await remoteManager.create(
-          collectionName: "medicine_schedule", data: schedule);
+      await firebaseManager.create(
+          collection: "medicine_schedule", data: schedule);
       getTakenData(date);
     } catch (err) {
       rethrow;
@@ -426,8 +430,7 @@ class AddMedicineProvider with ChangeNotifier {
 
   Future getTakenData(DateTime date) async {
     try {
-      var response =
-          await remoteManager.get(collectionName: "medicine_schedule");
+      var response = await firebaseManager.get(collection: "medicine_schedule");
       medicineSchedule.clear();
       response.docs.forEach((element) {
         if (element['user_id'] == userId) {
@@ -453,12 +456,12 @@ class AddMedicineProvider with ChangeNotifier {
 
   Future deleteMedicine(String id) async {
     try {
-      await remoteManager.delete(collectionName: "medicine", id: id);
+      await firebaseManager.delete(collection: "medicine", id: id);
       doseTime.clear();
       allMedicineDetails.forEach((element) async {
         if (element.id == id) {
-          await remoteManager.delete(
-              collectionName: "medicine_details", id: element.medId.toString());
+          await firebaseManager.delete(
+              collection: "medicine_details", id: element.medId.toString());
           allMedicineDetails.remove(element);
           notifyListeners();
         }
@@ -468,8 +471,8 @@ class AddMedicineProvider with ChangeNotifier {
       });
       medicineDetails.forEach((element) async {
         if (element.id == id) {
-          await remoteManager.delete(
-              collectionName: "medicine_details", id: element.medId.toString());
+          await firebaseManager.delete(
+              collection: "medicine_details", id: element.medId.toString());
           medicineDetails.remove(element);
           notifyListeners();
         }
@@ -500,8 +503,8 @@ class AddMedicineProvider with ChangeNotifier {
         "doseQuantity": addMedicine.doseQuantity,
         "description": addMedicine.description
       };
-      await remoteManager.update(
-          collectionName: "medicine", id: id, data: medicine);
+      await firebaseManager.update(
+          collection: "medicine", id: id, data: medicine);
       var ind = data.indexWhere((element) => element.id == id);
       data[ind] = AddMedicine(
         id: id,
@@ -539,8 +542,8 @@ class AddMedicineProvider with ChangeNotifier {
               var index1 = medicineDetails.indexWhere(
                   (element) => value[0].toString() == element.medId.toString());
 
-              await remoteManager.update(
-                  collectionName: "medicine_details",
+              await firebaseManager.update(
+                  collection: "medicine_details",
                   id: element.medId.toString(),
                   data: medicine);
               var updatedData = AddMedicine(
@@ -578,8 +581,8 @@ class AddMedicineProvider with ChangeNotifier {
                 "second_dose": addMedicine.secondDoseTime,
                 "which_dose": value[1].toString(),
               };
-              await remoteManager.update(
-                  collectionName: "medicine_details",
+              await firebaseManager.update(
+                  collection: "medicine_details",
                   id: element.medId.toString(),
                   data: medicine);
               var updatedData = AddMedicine(
@@ -617,8 +620,8 @@ class AddMedicineProvider with ChangeNotifier {
                 "third_dose": addMedicine.thirdDoseTime,
                 "which_dose": value[1].toString(),
               };
-              await remoteManager.update(
-                  collectionName: "medicine_details",
+              await firebaseManager.update(
+                  collection: "medicine_details",
                   id: element.medId.toString(),
                   data: medicine);
               var updatedData = AddMedicine(

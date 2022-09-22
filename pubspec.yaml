@@ -52,8 +52,8 @@ dependencies:
   hive_flutter: ^1.1.0
   hive_generator: ^1.1.3
   build_runner: ^2.2.1
-  remote_manager:
-    path: ../../StudioProjects/remote_manager
+  firebase_manager:
+    path: ../packages/firebase_manager
 
 dev_dependencies:
   flutter_test:
