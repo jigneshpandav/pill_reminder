@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "188626949651",
-    "project_id": "medicine-reminder-ba9d6",
-    "storage_bucket": "medicine-reminder-ba9d6.appspot.com"
+    "project_number": "203125210234",
+    "project_id": "pill-reminder-dev",
+    "storage_bucket": "pill-reminder-dev.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:188626949651:android:d1ce45290b0b1e1d4251e6",
+        "mobilesdk_app_id": "1:203125210234:android:4c6a66343d16929afecfc3",
         "android_client_info": {
-          "package_name": "com.example.medicine_reminder.dev"
+          "package_name": "com.indiagenisys.pillstimealarm.medicinereminders.dev"
         }
       },
       "oauth_client": [
         {
-          "client_id": "188626949651-o10s8sfhd9q5visb4judje94ig0ig5p1.apps.googleusercontent.com",
+          "client_id": "203125210234-sqdt1uhrbo4omaf8du8p5m94dvqtm038.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBR1QEN6UfyusPImt31IGfLQUGbfEFKbnU"
+          "current_key": "AIzaSyAKzTJQ762BCO-lvzi-bEergnVEV87aEOM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "188626949651-o10s8sfhd9q5visb4judje94ig0ig5p1.apps.googleusercontent.com",
+              "client_id": "203125210234-sqdt1uhrbo4omaf8du8p5m94dvqtm038.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

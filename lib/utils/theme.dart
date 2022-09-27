@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'text_utils.dart';
-
+import 'package:medicine_reminder/utils/statics.dart';
 
 ThemeData themeData() {
   return ThemeData(
