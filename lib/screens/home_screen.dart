@@ -1,6 +1,9 @@
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:medicine_reminder/screens/doctors_screen.dart';
+import 'package:medicine_reminder/screens/medication_step_1_screen.dart';
+import 'package:medicine_reminder/screens/users_screen.dart';
 import 'package:medicine_reminder/utils/statics.dart';
 import 'package:medicine_reminder/widgets/radio_option.dart';
 import 'package:medicine_reminder/widgets/sticky_date_picker/sticky_date_picker.dart';
@@ -94,6 +97,7 @@ class _HomeScreenState extends State<HomeScreen>
               color: kSecondaryColor,
             ),
             onPress: () {
+              Navigator.of(context).pushNamed(MedicationStep1Screen.routeName);
               _animationController.reverse();
             },
           ),
@@ -108,6 +112,7 @@ class _HomeScreenState extends State<HomeScreen>
               color: kSecondaryColor,
             ),
             onPress: () {
+              Navigator.of(context).pushNamed(UsersScreen.routeName);
               _animationController.reverse();
             },
           ),
@@ -122,12 +127,7 @@ class _HomeScreenState extends State<HomeScreen>
               color: kSecondaryColor,
             ),
             onPress: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => HomeScreen(),
-                ),
-              );
+              Navigator.of(context).pushNamed(DoctorsScreen.routeName);
               _animationController.reverse();
             },
           ),
@@ -151,9 +151,8 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Container topDatePicker() {
+  Widget topDatePicker() {
     final dataKeyMonth = new GlobalKey();
-    final dataKeyDate = new GlobalKey();
     return Container(
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(

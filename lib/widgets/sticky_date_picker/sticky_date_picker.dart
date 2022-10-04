@@ -185,7 +185,6 @@ class _StickyDatePickerState extends State<StickyDatePicker> {
 
           // Check if this date is the one that is currently selected
           bool isSelected = false;
-          print("selected ${widget.selectedDate}");
           if (months.indexOf('${widget.selectedMonth}') + 1 ==
               widget.selectedDate.month) {
             isSelected = widget.selectedDate != null

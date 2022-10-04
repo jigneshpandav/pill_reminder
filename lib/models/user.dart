@@ -33,7 +33,11 @@ class User {
     String? id,
     String? name,
     String? photo,
-  });
+  }) {
+    _id = id;
+    _name = name;
+    _photo = photo;
+  }
 
   User.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
@@ -47,5 +51,12 @@ class User {
     data['name'] = _name;
     data['photo'] = _photo;
     return data;
+  }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    print("name $name imagePath $photo");
+    return super.toString();
   }
 }

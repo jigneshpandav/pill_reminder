@@ -56,6 +56,7 @@ dependencies:
     path: ../packages/firebase_manager
   flutter_fab_dialer: ^0.1.1
   floating_action_bubble: ^1.1.4
+  uuid: ^3.0.6
 
 dev_dependencies:
   flutter_test:

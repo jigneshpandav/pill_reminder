@@ -4,8 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:medicine_reminder/screens/medication_screen.dart';
+import 'package:medicine_reminder/screens/doctors_screen.dart';
+import 'package:medicine_reminder/screens/medication_step_1_screen.dart';
+import 'package:medicine_reminder/screens/users_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
+import 'package:uuid/uuid_util.dart';
 
 import 'models/doctor.dart';
 import 'models/medication.dart';
@@ -38,10 +42,26 @@ void main() async {
   Hive.registerAdapter(ReminderAdapter());
   Hive.registerAdapter(DoctorAdapter());
   Hive.registerAdapter(UserAdapter());
+
   await Hive.openBox(
     "medicine_reminder",
     encryptionCipher: HiveAesCipher(encryptionKey),
   );
+
+  var box = Hive.box('medicine_reminder');
+  var users = box.get('users');
+
+  // if (users == null) {
+  var uuid = const Uuid();
+  // List<User> users = [];
+  await users.clear();
+  User guestUser = User(id: uuid.v1(), name: "Guest");
+  users.add(guestUser);
+
+  await box.put('users', users);
+  // }
+
+  print(users);
 
   runApp(MyApp());
 }
@@ -59,7 +79,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
-        MedicationScreen.routeName: (context) => MedicationScreen()
+        UsersScreen.routeName: (context) => UsersScreen(),
+        DoctorsScreen.routeName: (context) => DoctorsScreen(),
+        MedicationStep1Screen.routeName: (context) => MedicationStep1Screen()
       },
     );
   }
